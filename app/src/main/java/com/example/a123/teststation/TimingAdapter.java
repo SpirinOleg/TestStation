@@ -1,6 +1,6 @@
 package com.example.a123.teststation;
 
-import android.nfc.Tag;
+import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,7 +31,7 @@ public class TimingAdapter extends RecyclerView.Adapter<TimingAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(TimingAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(TimingAdapter.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         Log.e(TAG, stations.get(position).getStationTitle());
         holder.citiesName.setText(stations.get(position).getStationTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
