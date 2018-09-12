@@ -1,6 +1,7 @@
 package com.example.a123.teststation;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -81,5 +82,13 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
     @Override
     public void onClick(int position, Station station) {
         Log.d("TimingFragment", Integer.toString(station.getStationId()));
+    }
+
+    public class StationAsyncTask extends AsyncTask<String, Void, List<City>>{
+
+        @Override
+        protected List<City> doInBackground(String... strings) {
+            return null;
+        }
     }
 }
