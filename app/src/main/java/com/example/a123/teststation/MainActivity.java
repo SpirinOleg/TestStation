@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -41,36 +42,6 @@ public class MainActivity extends AppCompatActivity
         setAboutFragment();
     }
 
-   @Override
-   public void onBackPressed() {
-       openQuitDialog();
-    }
-
-    private void openQuitDialog() {
-        AlertDialog.Builder quitDialog = new AlertDialog.Builder(
-                MainActivity.this);
-        quitDialog.setTitle("Выход: Вы уверены?");
-
-        quitDialog.setPositiveButton("Да", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // TODO
-                finish();
-            }
-        });
-
-        quitDialog.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // TODO
-            }
-        });
-
-        quitDialog.show();
-    }
-
-
-
 
     /*@Override
     public void onBackPressed() {
@@ -107,19 +78,52 @@ public class MainActivity extends AppCompatActivity
 
     private void setTimingFragment(){
         Fragment mainFragment = new MainFragment();
+        getSupportFragmentManager().popBackStack("aboutFragment",0);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainContainer, mainFragment);
 
-        transaction.addToBackStack(null);
+        transaction.addToBackStack("mainFragment");
         transaction.commit();
     }
 
     private void setAboutFragment(){
         Fragment aboutFragment = new AboutFragment();
+        getSupportFragmentManager().popBackStack("aboutFragment",0);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainContainer, aboutFragment);
 
-        transaction.addToBackStack(null);
+        transaction.addToBackStack("aboutFragment");
         transaction.commit();
+    }
+
+   @Override
+    public void onBackPressed() {
+       FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0){
+            fm.popBackStack();
+        }
+            else{
+            openQuitDialog();
+        }
+    }
+
+    private void openQuitDialog() {
+        AlertDialog.Builder quitDialog = new AlertDialog.Builder(
+                MainActivity.this);
+        quitDialog.setTitle("Выход: Вы уверены?");
+        quitDialog.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO
+                finish();
+            }
+        });
+        quitDialog.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO
+            }
+        });
+        quitDialog.show();
     }
 }
