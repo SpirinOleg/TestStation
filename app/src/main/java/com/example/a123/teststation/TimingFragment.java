@@ -1,6 +1,7 @@
 package com.example.a123.teststation;
 
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,8 +11,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -28,6 +33,7 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
     private static final String TAG = TimingFragment.class.getSimpleName();
     private TimingAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private StationAsyncTask task;
     private boolean flag; //переменная булевская для преключения между списком городов отправления и прибытия
 
     @Nullable
@@ -36,11 +42,17 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
         flag = getArguments().getBoolean("flag");
         return inflater.inflate(R.layout.fragment_timing, container, false);
         //сделать по подобию https://stackoverflow.com/questions/12739909/send-data-from-activity-to-fragment-in-android
+
+
     }
+
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //setHasOptionsMenu(true);
+
 
 
 
@@ -53,6 +65,9 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
 
 
         Gson gson = new Gson();
+        task = new StationAsyncTask();
+
+
         try{
             InputStream file = getActivity().getResources().openRawResource(R.raw.allstations);
             BufferedReader rd = new BufferedReader(new InputStreamReader(file));
@@ -79,16 +94,41 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
         }
     }
 
+/*    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_timing_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.update){
+            new StationAsyncTask().execute();
+        }
+        return super.onOptionsItemSelected(item);
+    }*/
+
     @Override
     public void onClick(int position, Station station) {
         Log.d("TimingFragment", Integer.toString(station.getStationId()));
     }
 
-    public class StationAsyncTask extends AsyncTask<String, Void, List<City>>{
+    public static class StationAsyncTask extends AsyncTask<String, Void, List<City>>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
 
         @Override
         protected List<City> doInBackground(String... strings) {
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<City> cities) {
+            super.onPostExecute(cities);
         }
     }
 }
