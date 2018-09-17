@@ -43,15 +43,14 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
         return inflater.inflate(R.layout.fragment_timing, container, false);
         //сделать по подобию https://stackoverflow.com/questions/12739909/send-data-from-activity-to-fragment-in-android
 
-
     }
-
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //setHasOptionsMenu(true);
+        //Необходимо для кнопки обновления в меню
 
 
 
@@ -93,7 +92,7 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
               Toast.makeText(view.getContext(),"Ошибка импорта json", Toast.LENGTH_LONG).show();
         }
     }
-
+//Необходимо для кнопки обновления в меню
 /*    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_timing_fragment, menu);
@@ -118,7 +117,7 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
+//Не выводит тоаст
         }
 
         @Override
