@@ -4,6 +4,7 @@ package com.example.a123.teststation;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -16,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
     private TimingAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private StationAsyncTask task;
+
+
     private boolean flag; //переменная булевская для преключения между списком городов отправления и прибытия
 
     @Nullable
@@ -42,7 +46,6 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
         flag = getArguments().getBoolean("flag");
         return inflater.inflate(R.layout.fragment_timing, container, false);
         //сделать по подобию https://stackoverflow.com/questions/12739909/send-data-from-activity-to-fragment-in-android
-
     }
 
 
@@ -66,10 +69,11 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
         Gson gson = new Gson();
         task = new StationAsyncTask();
 
-
         try{
+            task.execute();
             InputStream file = getActivity().getResources().openRawResource(R.raw.allstations);
             BufferedReader rd = new BufferedReader(new InputStreamReader(file));
+
 //        Type type = new TypeToken<CityTablo>() {}.getType();
             CityTablo citiTablo = gson.fromJson(rd, CityTablo.class);
             List<Station> allstations = new LinkedList<>();
@@ -87,6 +91,7 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
 
             mAdapter = new TimingAdapter(allstations, this);
             mRecyclerView.setAdapter(mAdapter);
+
         }
         catch (final Exception e){
               Toast.makeText(view.getContext(),"Ошибка импорта json", Toast.LENGTH_LONG).show();
@@ -112,22 +117,26 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
         Log.d("TimingFragment", Integer.toString(station.getStationId()));
     }
 
-    public static class StationAsyncTask extends AsyncTask<String, Void, List<City>>{
+    public class StationAsyncTask extends AsyncTask<String, Void, List<City>>{
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//Не выводит тоаст
+            Log.e(TAG, "Задача запущена");
+            Toast.makeText(getActivity(), "Задача запущена", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         protected List<City> doInBackground(String... strings) {
+            Log.e(TAG, "Фоновый запуск");
             return null;
         }
 
         @Override
         protected void onPostExecute(List<City> cities) {
             super.onPostExecute(cities);
+            Log.e(TAG, "Задача завершена");
+            Toast.makeText(getActivity(), "Задача завершена", Toast.LENGTH_SHORT).show();
         }
     }
 }
