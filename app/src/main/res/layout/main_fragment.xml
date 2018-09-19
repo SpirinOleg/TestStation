@@ -1,20 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.example.a123.teststation.MainFragment">
 
-    <Button
+<!--    <Button
         android:id="@+id/btn_station_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Станция отправления"/>
+        android:text="Станция отправления"/>-->
 
-    <Button
+
+        <EditText
+            android:id="@+id/departureStationAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="@string/select_station"
+            android:inputType="textPersonName"
+            android:onClick="showStaionFrom"
+            tools:layout_editor_absoluteX="85dp"
+            tools:layout_editor_absoluteY="16dp"/>
+
+        <EditText
+            android:id="@+id/arrivalStationAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="@string/select_station"
+            android:inputType="textPersonName"
+            android:onClick="showStaionTo"
+            tools:layout_editor_absoluteX="85dp"
+            tools:layout_editor_absoluteY="126dp"/>
+
+<!--    <Button
         android:id="@+id/btn_station_to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Станция прибытия"/>
+        android:text="Станция прибытия"/>-->
 
 </LinearLayout>

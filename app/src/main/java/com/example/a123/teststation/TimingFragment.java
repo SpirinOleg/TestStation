@@ -80,6 +80,7 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
             List<City> cities;
             if (flag) {
                 Log.e(TAG, "getCitiesFrom" + citiTablo.getCitiesFrom().get(0).getStations().get(0).getStationTitle());
+
                 cities = citiTablo.getCitiesFrom();
             } else {
                 Log.e(TAG, "getCitiesTo" + citiTablo.getCitiesTo().get(0).getStations().get(0).getStationTitle());

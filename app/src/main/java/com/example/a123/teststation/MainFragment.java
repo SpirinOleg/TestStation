@@ -9,8 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainFragment extends Fragment {
+
+    public static final String STATION_NAME = "stationName";
 
 
     @Nullable
@@ -23,23 +26,44 @@ public class MainFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.btn_station_from).setOnClickListener(new View.OnClickListener() {
+        EditText departureStation = view.findViewById(R.id.departureStationAddress);
+        EditText arrivalStation = view.findViewById(R.id.arrivalStationAddress);
+
+        view.findViewById(R.id.departureStationAddress).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showStaionFrom();
+                showStaionFrom(view);
+                departureStation.setText();
+                //Здесь получить станцию через SP
+                //После сохранить значение
+                // Editor e = sp.edit();
+                //e.putString("station", station);
+                //e.commit();
+                //использовать метод getDefaultSharedPreferences()
+                //https://javadevblog.com/shared-preferences-v-android-sohranyaem-nastrojki.html
             }
         });
 
-        view.findViewById(R.id.btn_station_to).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.arrivalStationAddress).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showStaionTo();
+                showStaionTo(view);
+                arrivalStation.setText();
+                //Здесь получить станцию через SP
+                //После сохранить значение
+                // Editor e = sp.edit();
+                //e.putString("station", station);
+                //e.commit();
+                //использовать метод getDefaultSharedPreferences()
+                //https://javadevblog.com/shared-preferences-v-android-sohranyaem-nastrojki.html
             }
         });
 
     }
 
-    private void showStaionFrom(){
+
+
+    private void showStaionFrom(View view){
         Bundle bundle = new Bundle();
         bundle.putBoolean("flag", true);
 
@@ -52,7 +76,7 @@ public class MainFragment extends Fragment {
         transaction.commit();
     }
 
-    private void showStaionTo(){
+    private void showStaionTo(View view){
         Bundle bundle = new Bundle();
         bundle.putBoolean("flag", false);
 
