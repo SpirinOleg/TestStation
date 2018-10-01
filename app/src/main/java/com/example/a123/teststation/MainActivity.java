@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity
         quitDialog.show();
     }
 
+    //метод вызова pickerdate. Привязано к кнопке pickerdate
     public void selectDate(View view) {
         DialogFragment dateDialog = new DatePickerFragment();
         dateDialog.show(getSupportFragmentManager(), "datePicker");
