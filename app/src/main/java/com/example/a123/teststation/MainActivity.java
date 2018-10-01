@@ -1,5 +1,6 @@
 package com.example.a123.teststation;
 
+import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -103,4 +105,10 @@ public class MainActivity extends AppCompatActivity
         });
         quitDialog.show();
     }
+
+    public void selectDate(View view) {
+        DialogFragment dateDialog = new DatePickerFragment();
+        dateDialog.show(getSupportFragmentManager(), "datePicker");
+    }
+
 }

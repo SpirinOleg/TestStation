@@ -16,11 +16,11 @@
 
         <EditText
             android:id="@+id/departureStationAddress"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:focusable="false"
-            android:hint="@string/select_station"
+            android:hint="@string/select_station_from"
             android:inputType="textPersonName"
             android:onClick="showStaionFrom"
             tools:layout_editor_absoluteX="85dp"
@@ -28,15 +28,24 @@
 
         <EditText
             android:id="@+id/arrivalStationAddress"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:focusable="false"
-            android:hint="@string/select_station"
+            android:hint="@string/select_station_to"
             android:inputType="textPersonName"
             android:onClick="showStaionTo"
             tools:layout_editor_absoluteX="85dp"
             tools:layout_editor_absoluteY="126dp"/>
+
+        <EditText
+            android:id="@+id/pickerdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="@string/datepicker"
+            android:onClick="selectDate"/>
 
 <!--    <Button
         android:id="@+id/btn_station_to"

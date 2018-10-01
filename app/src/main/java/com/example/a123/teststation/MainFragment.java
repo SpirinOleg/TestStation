@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
 public class MainFragment extends Fragment {
@@ -33,7 +32,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 showStaionFrom(view);
-                departureStation.setText();
+                //departureStation.setText();
                 //Здесь получить станцию через SP
                 //После сохранить значение
                 // Editor e = sp.edit();
@@ -48,7 +47,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 showStaionTo(view);
-                arrivalStation.setText();
+                //arrivalStation.setText();
                 //Здесь получить станцию через SP
                 //После сохранить значение
                 // Editor e = sp.edit();
@@ -88,4 +87,7 @@ public class MainFragment extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+
+
 }

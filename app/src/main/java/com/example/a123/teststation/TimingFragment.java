@@ -1,6 +1,7 @@
 package com.example.a123.teststation;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
     private static final String TAG = TimingFragment.class.getSimpleName();
     private TimingAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private ProgressBar progressBar;
     private StationAsyncTask task;
 
 
@@ -54,8 +56,8 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
         super.onViewCreated(view, savedInstanceState);
         //setHasOptionsMenu(true);
         //Необходимо для кнопки обновления в меню
-
-
+        progressBar = view.findViewById(R.id.progressBar);
+        progressBar.setProgress(0);
 
 
         mRecyclerView = view.findViewById(R.id.recyclerView);
@@ -64,41 +66,22 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 layoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-
-
-        Gson gson = new Gson();
-        task = new StationAsyncTask();
-
-        try{
-            task.execute();
-            InputStream file = getActivity().getResources().openRawResource(R.raw.allstations);
-            BufferedReader rd = new BufferedReader(new InputStreamReader(file));
-
-//        Type type = new TypeToken<CityTablo>() {}.getType();
-            CityTablo citiTablo = gson.fromJson(rd, CityTablo.class);
-            List<Station> allstations = new LinkedList<>();
-            List<City> cities;
-            if (flag) {
-                Log.e(TAG, "getCitiesFrom" + citiTablo.getCitiesFrom().get(0).getStations().get(0).getStationTitle());
-
-                cities = citiTablo.getCitiesFrom();
-            } else {
-                Log.e(TAG, "getCitiesTo" + citiTablo.getCitiesTo().get(0).getStations().get(0).getStationTitle());
-                cities = citiTablo.getCitiesTo();
-            }
-            for (City city : cities) {
-                allstations.addAll(city.getStations());
-            }
-
-            mAdapter = new TimingAdapter(allstations, this);
-            mRecyclerView.setAdapter(mAdapter);
-
-        }
-        catch (final Exception e){
-              Toast.makeText(view.getContext(),"Ошибка импорта json", Toast.LENGTH_LONG).show();
-        }
     }
-//Необходимо для кнопки обновления в меню
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        task = new StationAsyncTask();
+        task.execute();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        task.cancel(true);
+    }
+
+    //Необходимо для кнопки обновления в меню
 /*    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_timing_fragment, menu);
@@ -118,26 +101,82 @@ public class TimingFragment extends Fragment implements OnItemRecyclerClick {
         Log.d("TimingFragment", Integer.toString(station.getStationId()));
     }
 
-    public class StationAsyncTask extends AsyncTask<String, Void, List<City>>{
+    public class StationAsyncTask extends AsyncTask<String, Integer, List<Station>>{
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             Log.e(TAG, "Задача запущена");
-            Toast.makeText(getActivity(), "Задача запущена", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.VISIBLE);
+            toast("Задача запущена");
         }
 
         @Override
-        protected List<City> doInBackground(String... strings) {
-            Log.e(TAG, "Фоновый запуск");
-            return null;
+        protected List<Station> doInBackground(String... strings) {
+            List<Station> allstations = new LinkedList<>();
+            getActivity().runOnUiThread(() -> toast("Начиню бессмыссленную работу"));
+            for (int i = 0; i < 100; i++) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+                publishProgress(i);
+            }
+            getActivity().runOnUiThread(() -> toast("Начиню полезную работу"));
+            try {
+                InputStream file = getActivity().getResources().openRawResource(R.raw.allstations);
+                BufferedReader rd = new BufferedReader(new InputStreamReader(file));
+                Gson gson = new Gson();
+//        Type type = new TypeToken<CityTablo>() {}.getType();
+                CityTablo citiTablo = gson.fromJson(rd, CityTablo.class);
+                List<City> cities;
+                if (flag) {
+                    Log.e(TAG, "getCitiesFrom" + citiTablo.getCitiesFrom().get(0).getStations().get(0).getStationTitle());
+
+                    cities = citiTablo.getCitiesFrom();
+                } else {
+                    Log.e(TAG, "getCitiesTo" + citiTablo.getCitiesTo().get(0).getStations().get(0).getStationTitle());
+                    cities = citiTablo.getCitiesTo();
+                }
+                for (City city : cities) {
+                    allstations.addAll(city.getStations());
+                }
+            } catch (Exception e){
+                getActivity().runOnUiThread(() -> toast("Ошибка импорта json"));
+            }
+            return allstations;
         }
 
         @Override
-        protected void onPostExecute(List<City> cities) {
-            super.onPostExecute(cities);
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            progressBar.setProgress(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(List<Station> stations) {
+            super.onPostExecute(stations);
+            progressBar.setVisibility(View.INVISIBLE);
+            mAdapter = new TimingAdapter(stations, TimingFragment.this);
+            mRecyclerView.setAdapter(mAdapter);
             Log.e(TAG, "Задача завершена");
-            Toast.makeText(getActivity(), "Задача завершена", Toast.LENGTH_SHORT).show();
+            toast("Задача завершена");
+        }
+
+        @Override
+        protected void onCancelled() {
+            Log.e(TAG, "onCancelled()");
+            toast("Операция отменена");
+            super.onCancelled();
+        }
+
+        private void toast(String message) {
+            Activity activity = getActivity();
+            if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
